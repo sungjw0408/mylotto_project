@@ -1,0 +1,33 @@
+<p>안녕하세요, {{ user.username }}님! 
+   (<a href="{% url 'logout' %}">로그아웃</a>)
+</p>
+
+<hr>
+
+{% if current_round %}
+    <h2>{{ current_round.round_number }}회차 로또 구매</h2>
+    <p>추첨일: {{ current_round.draw_date }}</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" name="auto_buy">자동으로 1장 구매하기</button>
+    </form>
+
+    <hr>
+
+    <h3>이번 회차 나의 티켓</h3>
+    <ul>
+    {% for ticket in my_tickets %}
+        <li>
+            {{ ticket.numbers }} 
+            {% if ticket.is_auto %}(자동){% endif %}
+        </li>
+    {% empty %}
+        <li>아직 구매한 티켓이 없습니다.</li>
+    {% endfor %}
+    </ul>
+
+{% else %}
+    <h2>현재 구매 가능한 로또 회차가 없습니다.</h2>
+    <p>관리자에게 문의하세요.</p>
+{% endif %}

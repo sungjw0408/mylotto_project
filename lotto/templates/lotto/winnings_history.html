@@ -1,0 +1,38 @@
+<p>안녕하세요, {{ user.username }}님! 
+   (<a href="{% url 'lotto:lotto_index' %}">구매 페이지로</a>)
+   <form action="{% url 'logout' %}" method="post" style="display: inline;">
+       {% csrf_token %}
+       <button type="submit" style="background:none; border:none; padding:0; color:#007bff; text-decoration:underline; cursor:pointer;">
+           로그아웃
+       </button>
+   </form>
+</p>
+
+<hr>
+
+<h2>나의 당첨 내역</h2>
+
+{% if my_winnings %}
+    <table border="1">
+        <thead>
+            <tr>
+                <th>회차</th>
+                <th>구매 번호</th>
+                <th>등수</th>
+                <th>당첨금</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for win in my_winnings %}
+            <tr>
+                <td>{{ win.ticket.round.round_number }}회</td>
+                <td>{{ win.ticket.numbers }}</td>
+                <td>{{ win.rank }}등</td>
+                <td>{{ win.prize_amount }}원</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>아직 당첨된 내역이 없습니다.</p>
+{% endif %}

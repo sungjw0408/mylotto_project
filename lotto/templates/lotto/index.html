@@ -1,0 +1,86 @@
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+            {{ message }}
+        </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<p>안녕하세요, {{ user.username }}님! 
+   (<a href="{% url 'lotto:winnings_history' %}">나의 당첨 내역</a>)
+   <form action="{% url 'logout' %}" method="post" style="display: inline;">
+       {% csrf_token %}
+       <button type="submit" style="background:none; border:none; padding:0; color:#007bff; text-decoration:underline; cursor:pointer;">
+           로그아웃
+       </button>
+   </form>
+</p>
+
+<hr>
+
+{% if current_round %}
+    <h2>{{ current_round.round_number }}회차 로또 구매</h2>
+    <p>추첨일: {{ current_round.draw_date }}</p>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div>
+            <label>수동 번호 (6개 선택):</label>
+            <input type="number" name="num" min="1" max="45" required>
+            <input type="number" name="num" min="1" max="45" required>
+            <input type="number" name="num" min="1" max="45" required>
+            <input type="number" name="num" min="1" max="45" required>
+            <input type="number" name="num" min="1" max="45" required>
+            <input type="number" name="num" min="1" max="45" required>
+            <button type="submit" name="manual_buy">수동 구매하기</button>
+        </div>
+    </form>
+
+    <hr style="margin: 10px 0;">
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" name="auto_buy">자동으로 1장 구매하기</button>
+    </form>
+    <hr>
+
+    <h3>이번 회차 나의 티켓</h3>
+    <ul>
+    {% for ticket in my_tickets_current %}
+        <li>{{ ticket.numbers }} {% if ticket.is_auto %}(자동){% endif %}</li>
+    {% empty %}
+        <li>아직 구매한 티켓이 없습니다.</li>
+    {% endfor %}
+    </ul>
+
+{% else %}
+    <h2>현재 구매 가능한 로또 회차가 없습니다.</h2>
+{% endif %}
+
+<hr><hr>
+
+{% if latest_drawn_round %}
+    <h2>지난 {{ latest_drawn_round.round_number }}회차 당첨 확인</h2>
+    <p>당첨 번호: <strong>{{ latest_drawn_round.winning_numbers }}</strong></p>
+
+    <h3>지난 회차 나의 티켓</h3>
+    <ul>
+    {% for ticket in my_tickets_latest_drawn %}
+        <li>
+            {{ ticket.numbers }} 
+            {% if ticket.rank == 1 %}
+                <strong><span style="color: red;">(1등 당첨!)</span></strong>
+            {% elif ticket.rank > 1 %}
+                <strong><span style="color: blue;">({{ ticket.rank }}등 당첨)</span></strong>
+            {% else %}
+                (낙첨)
+            {% endif %}
+        </li>
+    {% empty %}
+        <li>지난 회차에 구매한 티켓이 없습니다.</li>
+    {% endfor %}
+    </ul>
+{% endif %}
