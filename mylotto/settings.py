@@ -30,6 +30,7 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+# mylotto/setting.py
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -123,5 +124,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# mylotto/setting.py
+#로그인 성공 시
 LOGIN_REDIRECT_URL = '/lotto/'
+#로그아웃 성공 시
 LOGOUT_REDIRECT_URL = '/lotto/'
