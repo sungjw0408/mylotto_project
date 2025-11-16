@@ -5,7 +5,7 @@ services:
   web:         
     build: .  
     container_name: lotto_web  # 컨테이너의 이름
-    command: python manage.py runserver 0.0.0.0:8000 
+    volumes:
       - .:/app
     ports:     
       - "8000:8000" 
@@ -15,7 +15,7 @@ services:
       - .env
 
   db:          
-    image: postgres:15-alpine .
+    image: postgres:15-alpine
     container_name: lotto_db  
     volumes:    
       - postgres_data:/var/lib/postgresql/data/ 
