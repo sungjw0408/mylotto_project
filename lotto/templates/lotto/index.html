@@ -35,7 +35,7 @@
             <input type="number" name="num" min="1" max="45" required>
             <input type="number" name="num" min="1" max="45" required>
             <input type="number" name="num" min="1" max="45" required>
-            <button type="submit" name="manual_buy">수동 구매하기</button>
+            <button type="submit" name="manual_buy">구매하기</button>
         </div>
     </form>
 
@@ -43,7 +43,7 @@
 
     <form method="post">
         {% csrf_token %}
-        <button type="submit" name="auto_buy">자동으로 1장 구매하기</button>
+        <button type="submit" name="auto_buy">자동구매하기</button>
     </form>
     <hr>
 

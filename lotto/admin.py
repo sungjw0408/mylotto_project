@@ -16,8 +16,14 @@ class LottoTicketAdmin(admin.ModelAdmin):
 # 2. Winnings model -> admin 페이지에 등록
 @admin.register(Winnings)
 class WinningsAdmin(admin.ModelAdmin):
-    list_display = ('ticket', 'rank', 'prize_amount')
+    list_display = ('ticket', 'rank', 'prize_amount', 'get_is_auto')
+
     search_fields = ('ticket__owner__username',)
+
+    # 자동/수동 여부
+    @admin.display(description='자동/수동 여부', boolean=True)
+    def get_is_auto(self, obj):
+        return obj.ticket.is_auto
 
 
 # 3. LottoRound model 관리자 설정
@@ -33,10 +39,8 @@ class LottoRoundAdmin(admin.ModelAdmin):
     def draw_winning_numbers(self, request, queryset):
         # 선택한 회차 반복
         for round in queryset:
-            
             if round.is_drawn:
                 continue
-
             # 당첨 번호 생성
             winning_numbers = sorted(random.sample(range(1, 46), 6))
             round.winning_numbers = winning_numbers
@@ -45,6 +49,7 @@ class LottoRoundAdmin(admin.ModelAdmin):
 
             # 이 회차의 모든 구매티켓 당첨 여부 확인
             tickets_in_round = LottoTicket.objects.filter(round=round)
+
             for ticket in tickets_in_round:
                 # 일치하는 번호 개수 확인
                 user_numbers = set(ticket.numbers)

@@ -10,6 +10,10 @@ class LottoRound(models.Model):
     winning_numbers = models.JSONField(null=True, blank=True, verbose_name="당첨 번호")
     is_drawn = models.BooleanField(default=False, verbose_name="추첨 완료 여부")
 
+    class Meta:
+        verbose_name = 'Lotto Round'      
+        verbose_name_plural = '로또 회차'
+
     def __str__(self):
         return f"{self.round_number}회차"
 #로또 티켓 정보
@@ -21,6 +25,9 @@ class LottoTicket(models.Model):
     numbers = models.JSONField(verbose_name="선택 번호") 
     is_auto = models.BooleanField(default=False, verbose_name="자동 구매 여부")
     purchase_date = models.DateTimeField(auto_now_add=True) # 구매 시각 자동 저장
+    class Meta:
+        verbose_name = 'Lotto Ticket'
+        verbose_name_plural = '로또 티켓'
 
     def __str__(self):
         return f"{self.owner.username}님의 {self.round.round_number}회차 티켓"
@@ -30,6 +37,9 @@ class Winnings(models.Model):
     ticket = models.OneToOneField(LottoTicket, on_delete=models.CASCADE, verbose_name="당첨 티켓")
     rank = models.PositiveIntegerField(verbose_name="등수")
     prize_amount = models.DecimalField(max_digits=12, decimal_places=0, verbose_name="당첨금")
+    class Meta:
+        verbose_name = 'Winning'
+        verbose_name_plural = '당첨자'
 
     def __str__(self):
         return f"{self.ticket} - {self.rank}등 당첨"

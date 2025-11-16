@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,7 +25,8 @@ SECRET_KEY = 'django-insecure-3_xqj9k@y3mmxn3$_=xx5v*a+grxnxe@n_$hx)ylip33ltdo0g
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+#컨테이너 접속 허용
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '*']
 
 
 # Application definition
@@ -78,8 +79,12 @@ WSGI_APPLICATION = 'mylotto.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DB_NAME'),     # .env 파일 'lotto_db'
+        'USER': os.environ.get('DB_USER'),     # .env 파일 'lotto_user'
+        'PASSWORD': os.environ.get('DB_PASS'), # .env 파일 'lotto_password'
+        'HOST': os.environ.get('DB_HOST'),     # .env 파일 'db'
+        'PORT': os.environ.get('DB_PORT'),     # .env 파일 '5432'
     }
 }
 
@@ -129,3 +134,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = '/lotto/'
 #로그아웃 성공 시
 LOGOUT_REDIRECT_URL = '/lotto/'
+
